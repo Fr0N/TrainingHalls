@@ -25,4 +25,15 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
             @Param("reservationDay") String reservationDay,
             @Param("reservationStartHour") String reservationStartHour,
             @Param("reservationEndHour") String reservationEndHour);
+
+
+    @Query(value = "SELECT * FROM reservations AS r WHERE r.hall_id = :hallId AND " +
+            "(r.day = :reservationDay AND " +
+            "(r.start_hour <= :reservationStartHour AND :reservationStartHour < r.end_hour OR " +
+            "r.start_hour < :reservationEndHour AND :reservationEndHour <= r.end_hour))", nativeQuery = true)
+    Reservation checkIfHallIsFreeByDayAndTimePeriod(
+            @Param("hallId") String hallId,
+            @Param("reservationDay") String reservationDay,
+            @Param("reservationStartHour") String reservationStartHour,
+            @Param("reservationEndHour") String reservationEndHour);
 }

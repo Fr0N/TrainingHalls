@@ -30,7 +30,7 @@ public class Reservation {
     private Hall hall;
 
     @Column(columnDefinition = "DATE")
-    private Date day;
+    private String day;
 
     @Column(columnDefinition = "TIME")
     private String startHour;
@@ -65,11 +65,11 @@ public class Reservation {
         this.hall = hall;
     }
 
-    public Date getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(Date day) {
+    public void setDay(String day) {
         this.day = day;
     }
 

@@ -1,12 +1,12 @@
 package com.traininghalls.areas.reservations.controllers;
 
 import com.google.gson.Gson;
+import com.traininghalls.areas.reservations.models.CreateReservationBindingModel;
 import com.traininghalls.areas.reservations.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ReservationController {
@@ -29,6 +29,18 @@ public class ReservationController {
                                         @RequestParam(required = true, name = "end_hour") String endHour) {
 
         return this.gson.toJson(this.reservationService.getFreeHallIdsByDayAndTimePeriod(day, startHour, endHour));
+    }
+
+
+    @PostMapping("/api/reservation/create")
+    public ResponseEntity<?> createReservation(@RequestBody CreateReservationBindingModel reservationBindingModel) {
+        boolean result = this.reservationService.createReservation(reservationBindingModel);
+
+        if (result == false) {
+            return new ResponseEntity<>("Something went wrong while processing your request...", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>("test is ok", HttpStatus.OK);
     }
 
     @GetMapping(value = "/api/test", produces = "application/json")
