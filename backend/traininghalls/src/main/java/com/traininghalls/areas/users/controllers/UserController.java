@@ -1,5 +1,6 @@
 package com.traininghalls.areas.users.controllers;
 
+import com.google.gson.Gson;
 import com.traininghalls.areas.users.models.RegisterUserBindingModel;
 import com.traininghalls.areas.users.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,18 @@ public class UserController {
 
     private final UserService userService;
 
+    private final Gson gson;
+
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Gson gson) {
         this.userService = userService;
+        this.gson = gson;
     }
 
     @PostMapping(value = "/api/register")
     public ResponseEntity<?> register(@RequestBody RegisterUserBindingModel user) {
         if(this.userService.userExists(user.getUsername())) {
-            return new ResponseEntity<>("User already exists.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(this.gson.toJson("User already exists."), HttpStatus.BAD_REQUEST);
         }
 
         if (!user.getPassword().equals(user.getConfirmPassword())) {
@@ -33,7 +37,7 @@ public class UserController {
         }
 
         if(this.userService.register(user)) {
-            return new ResponseEntity<>("Successfully registered user.", HttpStatus.OK);
+            return new ResponseEntity<>(this.gson.toJson("Successfully registered user."), HttpStatus.OK);
         }
 
         return new ResponseEntity<>("Something went wrong while processing your request...", HttpStatus.INTERNAL_SERVER_ERROR);
