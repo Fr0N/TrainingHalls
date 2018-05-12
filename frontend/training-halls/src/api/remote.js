@@ -29,7 +29,18 @@ async function login(username, password) {
     });
     
     return await {"status" : res.status, "body" : res.json()};
-    // return await res.json();
+    
 }
 
-export { register, login};
+async function getHalls() {
+    const res = await fetch(host + 'api/halls/all', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    
+    return await res.json();
+}
+
+export { register, login, getHalls};
