@@ -21,19 +21,19 @@ class App extends Component {
         this.props.history.push('/');
     }
 
-render() {
-  return (
-      <div className="App">
-          <Header loggedIn={localStorage.getItem('authToken') != null} onLogout={this.onLogout} />
-          <Switch>
-              <Route exact path="/" component={HomePage} />
-              <PrivateRoute path="/halls/details/:id" component={HallReservePage} />
-              <Route path="/login" component={LoginPage} />
-              <Route path="/register" component={RegisterPage} />
-          </Switch>
-      </div>
-  );
-}
+    render() {
+        return (
+            <div className="App">
+                <Header loggedIn={localStorage.getItem('authToken') != null} onLogout={this.onLogout} />
+                <Switch>
+                    <Route exact path="/" component={HomePage} />
+                    <PrivateRoute path="/halls/details/:id" component={HallReservePage} />
+                    <Route path="/login" component={LoginPage} />
+                    <Route path="/register" component={RegisterPage} />
+                </Switch>
+            </div>
+        );
+    }
 }
 
 export default withRouter(App);

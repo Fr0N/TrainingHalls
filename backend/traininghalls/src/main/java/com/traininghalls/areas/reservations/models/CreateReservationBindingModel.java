@@ -6,11 +6,9 @@ public class CreateReservationBindingModel {
 
     private String  hallId;
 
-    private String day;
+    private String start;
 
-    private Date start;
-
-    private Date end;
+    private String end;
 
     public CreateReservationBindingModel() {
     }
@@ -23,27 +21,19 @@ public class CreateReservationBindingModel {
         this.hallId = hallId;
     }
 
-    public String getDay() {
-        return day;
-    }
-
-    public void setDay(String day) {
-        this.day = day;
-    }
-
-    public Date getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 }

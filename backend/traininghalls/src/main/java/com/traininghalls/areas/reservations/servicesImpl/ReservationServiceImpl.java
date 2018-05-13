@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +37,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<String> getFreeHallIdsByDayAndTimePeriod(String reservationDay, String reservationStartHour, String reservationEndHour) {
-        return this.reservationRepository.getFreeHallIdsByDayAndTimePeriod(reservationDay, reservationStartHour, reservationEndHour);
+    public List<String> getFreeHallIdsByDayAndTimePeriod(String reservationStartTime, String reservationEndTime) {
+        return this.reservationRepository.getFreeHallIdsByDayAndTimePeriod(reservationStartTime, reservationEndTime);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean createReservation(CreateReservationBindingModel reservationBindingModel) {
+    public boolean createReservation(CreateReservationBindingModel reservationBindingModel) throws ParseException {
         Hall hallToBeReserved = this.hallService.findById(reservationBindingModel.getHallId());
         if (hallToBeReserved == null) {
             return false;
@@ -57,8 +60,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setUser(user);
         reservation.setHall(hallToBeReserved);
-        reservation.setStart(reservationBindingModel.getStart());
-        reservation.setEnd(reservationBindingModel.getEnd());
+        reservation.setStart(new Date(reservationBindingModel.getStart()));
+        reservation.setEnd(new Date(reservationBindingModel.getEnd()));
 
         System.out.println("Before transaction");
         this.executeTransactionApproval(reservation, user);
@@ -67,6 +70,11 @@ public class ReservationServiceImpl implements ReservationService {
 
 
         return true;
+    }
+
+    @Override
+    public List<Reservation> getAllReservationsForHallById(String id) {
+        return this.reservationRepository.findAllbyHallId(id);
     }
 
     private void executeTransactionApproval(Reservation reservation, User user){
