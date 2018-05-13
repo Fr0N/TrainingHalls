@@ -5,6 +5,7 @@ import moment from 'moment';
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { reserveHall } from '../../api/remote';
 
+
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 
@@ -16,7 +17,8 @@ export default class HallReservePage extends Component {
             hall: false,
             events: [],
             startTime: "",
-            endTime: ""
+            endTime: "",
+            errors: false
         };
 
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
@@ -32,7 +34,7 @@ export default class HallReservePage extends Component {
 
         const reservations = await getReservationsForHallById(this.props.match.params.id);
         let events = [];
-        for(let key in reservations) {
+        for (let key in reservations) {
             events.push({
                 start: new Date(reservations[key].start),
                 end: new Date(reservations[key].end),
@@ -72,21 +74,27 @@ export default class HallReservePage extends Component {
         e.preventDefault();
 
         const res = await reserveHall(this.props.match.params.id, this.state.startTime, this.state.endTime);
-        
-        let body = await res.body;
-        
-        if (res.status != 200) {
-            this.setState({
-                errors: [body]
-            });
-            return;
-        }
-        // this.props.history.push('/');      
-    }
 
-    // calculatePrice() {
-    //     if(this.state.startTime)
-    // }
+        let body = await res.body;
+
+        if (res.status !== 200) {
+            if(!body){
+                this.setState({
+                    errors: ["An error occured, please try again!"]
+                });
+            } else {
+                this.setState({
+                    errors: [body]
+                });
+            }
+            
+            return;
+        } else {
+            this.setState({
+                errors: false
+            });
+        } 
+    }
 
     render() {
         let main = <p>Loading &hellip;</p>;
@@ -120,10 +128,22 @@ export default class HallReservePage extends Component {
             );
         }
 
+        let errorsToVisualize = null;
+        if (this.state.errors) {
+            errorsToVisualize = (
+                <div>
+                    {Object.keys(this.state.errors).map(k => {
+                        return <p key={k} className="alert alert-danger">{this.state.errors[k]}</p>;
+                    })}
+                </div>
+            );
+        }
+
         return (
             <div className="container">
                 <h1>Reserve Hall Page</h1>
                 {main}
+                {errorsToVisualize}
                 <BigCalendar
                     selectable
                     events={this.state.events}
@@ -132,8 +152,7 @@ export default class HallReservePage extends Component {
                     defaultDate={new Date()}
                     onSelectSlot={slotInfo => {
                         this.setState({ startTime: slotInfo.start.toLocaleString() }),
-                        this.setState({ endTime: slotInfo.end.toLocaleString() })
-                        console.log(slotInfo.end - slotInfo.start)
+                            this.setState({ endTime: slotInfo.end.toLocaleString() })
                     }}
                     step={10}
                     style={{ height: "100vh" }}

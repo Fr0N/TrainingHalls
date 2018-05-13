@@ -35,8 +35,6 @@ public class HallServiceImpl implements HallService {
     @Override
     public List<Hall> getFreeHallsByDayAndTimePeriod(SearchHallModel searchHallModel) {
 
-//        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
         List<String> hallIds = this.hallRepository.getFreeHallIdsByDayAndTimePeriod(searchHallModel.getStart(), searchHallModel.getEnd());
         List<Hall> halls = new ArrayList<>();
         for (String id : hallIds) {

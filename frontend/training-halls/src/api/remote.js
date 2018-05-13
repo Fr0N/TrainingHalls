@@ -98,7 +98,7 @@ async function searchHalls(start, end) {
         })
     });
     
-    return await res.json();
+    return await {"status" : res.status, "body" : res.json()};
     
 }
 

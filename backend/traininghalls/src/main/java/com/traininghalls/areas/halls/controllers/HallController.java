@@ -5,8 +5,14 @@ import com.traininghalls.areas.halls.entities.Hall;
 import com.traininghalls.areas.halls.models.SearchHallModel;
 import com.traininghalls.areas.halls.services.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -34,17 +40,19 @@ public class HallController {
         return this.gson.toJson(this.hallService.findById(id));
     }
 
-    //Gets all halls (only the ids) that aren't reserved on the given day, for the given time period
-    //TODO:Should return models of the halls and ids
-//    @GetMapping("/api/reservation/getFree")
-//    public @ResponseBody String getFreeHalls(@RequestParam(required = true, name = "start_time") String start,
-//                                             @RequestParam(required = true, name = "end_time") String end) {
-//
-//        return this.gson.toJson(this.hallService.getFreeHallsByDayAndTimePeriod(start, end));
-//    }
-
     @PostMapping("/api/halls/search")
-    public @ResponseBody String searchHalls(@RequestBody SearchHallModel searchHallModel) {
-        return this.gson.toJson(this.hallService.getFreeHallsByDayAndTimePeriod(searchHallModel));
+    public @ResponseBody ResponseEntity<?> searchHalls(@RequestBody SearchHallModel searchHallModel) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+        Date start = format.parse(searchHallModel.getStart());
+        Date end = format.parse(searchHallModel.getEnd());
+        if (start.after(end)) {
+            return new ResponseEntity<>(this.gson.toJson("Start date cannot be after end date!"), HttpStatus.BAD_REQUEST);
+        }
+
+        if (searchHallModel.getStart() == null || searchHallModel.getStart().isEmpty() || searchHallModel.getEnd() == null || searchHallModel.getEnd().isEmpty()) {
+            return new ResponseEntity<>(this.gson.toJson("Dates cannot be empty!"), HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(this.gson.toJson(this.hallService.getFreeHallsByDayAndTimePeriod(searchHallModel)), HttpStatus.OK);
     }
 }

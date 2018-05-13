@@ -33,14 +33,22 @@ public class UserController {
         }
 
         if (!user.getPassword().equals(user.getConfirmPassword())) {
-            return new ResponseEntity<>("Password and Confirm Password does not match.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(this.gson.toJson("Password and Confirm Password does not match."), HttpStatus.BAD_REQUEST);
+        }
+
+        if(user.getUsername() == null || user.getUsername().isEmpty()) {
+            return new ResponseEntity<>(this.gson.toJson("Username cannot be empty!"), HttpStatus.BAD_REQUEST);
+        }
+
+        if(user.getPassword() == null || user.getPassword().isEmpty()) {
+            return new ResponseEntity<>(this.gson.toJson("Password cannot be empty!"), HttpStatus.BAD_REQUEST);
         }
 
         if(this.userService.register(user)) {
             return new ResponseEntity<>(this.gson.toJson("Successfully registered user."), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>("Something went wrong while processing your request...", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(this.gson.toJson("Something went wrong while processing your request..."), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "/api/current")

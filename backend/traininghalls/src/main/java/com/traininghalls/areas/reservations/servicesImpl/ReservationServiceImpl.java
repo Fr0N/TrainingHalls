@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.*;
 
 @Service
@@ -43,7 +44,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public boolean checkIfHallIsFreeByDayAndTimePeriod(String hallId, Date reservationStart, Date reservationEnd) {
-        return this.reservationRepository.checkIfHallIsFreeByDayAndTimePeriod(hallId, reservationStart, reservationEnd) == null;
+        Reservation reservation = this.reservationRepository.checkIfHallIsFreeByDayAndTimePeriod(hallId, reservationStart, reservationEnd);
+
+        return reservation == null;
     }
 
     @Override
@@ -84,12 +87,12 @@ public class ReservationServiceImpl implements ReservationService {
         executor.submit(new Callable() {
             @Override
             public String call() throws Exception {
-                //TODO time should be random
-                Thread.sleep(10000);
+                Random random = new Random();
+                int time = random.nextInt(9) * 1000;
+                Thread.sleep(time);
 
-                System.out.println(saveReservation(reservation, user));
+                saveReservation(reservation, user);
 
-                System.out.println("in call()");
                 return "done";
             }
         });

@@ -8,8 +8,8 @@ class LoginPage extends Component {
         super(props);
 
         this.state = {
-            username: '',
-            password: ''
+            username: false,
+            password: false
         };
 
         this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -22,14 +22,35 @@ class LoginPage extends Component {
 
     async onSubmitHandler(e) {
         e.preventDefault();
+        if (!this.state.username) {
+            this.setState({
+                errors: ["Username cannot be empty!"]
+            });
+
+            return;
+        }
+        if (!this.state.password) {
+            this.setState({
+                errors: ["Password cannot be empty!"]
+            });
+
+            return;
+        }
         const res = await login(this.state.username, this.state.password);
         
         let body = await res.body;
-        
+
         if (res.status != 200) {
-            this.setState({
-                errors: [body]
-            });
+            if(!body){
+                this.setState({
+                    errors: ["An error occured while trying to login. Make shure username and password are correct!"]
+                });
+            } else {
+                this.setState({
+                    errors: [body]
+                });
+            }
+            
             return;
         }
 

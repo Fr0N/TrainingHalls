@@ -6,9 +6,13 @@ import com.traininghalls.areas.reservations.services.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.text.ParseException;
+import java.util.Date;
 
 @RestController
 public class ReservationController {
@@ -32,6 +36,17 @@ public class ReservationController {
 
     @PostMapping("/api/reservation/create")
     public ResponseEntity<?> createReservation(@RequestBody CreateReservationBindingModel reservationBindingModel) throws ParseException {
+
+        Date start = new Date(reservationBindingModel.getStart());
+        Date end = new Date(reservationBindingModel.getEnd());
+
+        if (!this.reservationService.checkIfHallIsFreeByDayAndTimePeriod(reservationBindingModel.getHallId(), start, end)) {
+            return new ResponseEntity<>(this.gson.toJson("Hall already reserved!"), HttpStatus.BAD_REQUEST);
+        }
+        if (start.after(end)) {
+            return new ResponseEntity<>(this.gson.toJson("Start date cannot be after end date!"), HttpStatus.BAD_REQUEST);
+        }
+
         boolean result = this.reservationService.createReservation(reservationBindingModel);
 
         if (result == false) {
