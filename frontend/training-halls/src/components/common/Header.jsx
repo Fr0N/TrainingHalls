@@ -12,6 +12,7 @@ export default class Header extends Component {
                     <div className="container-fluid">
                         <ul className="nav navbar-nav">
                             <li><NavLink className="nav-link" activeClassName="active" exact to="/">Home</NavLink></li>
+                            <li>{loggedIn && <NavLink to="/halls/search" className="nav-link" activeClassName="active">Search</NavLink>}</li>
                         </ul>
                         <ul className="nav navbar-nav navbar-right">
                             <li>{!loggedIn && <NavLink className="nav-link" activeClassName="active" to="/login">Login</NavLink>}</li>

@@ -85,5 +85,21 @@ async function getReservationsForHallById(id) {
     return await res.json();
 }
 
+async function searchHalls(start, end) {
+    const res = await fetch(host + 'api/halls/search', {
+        method: 'POST',
+        headers: {
+            'Authorization': localStorage.getItem('authToken'),
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            start,
+            end
+        })
+    });
+    
+    return await res.json();
+    
+}
 
-export { register, login, getHalls, getHallById, reserveHall, getReservationsForHallById};
+export { register, login, getHalls, getHallById, reserveHall, getReservationsForHallById, searchHalls};

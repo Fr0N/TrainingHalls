@@ -23,16 +23,6 @@ public class ReservationController {
         this.gson = gson;
     }
 
-    //Gets all halls (only the ids) that aren't reserved on the given day, for the given time period
-    //TODO:Should return models of the halls and ids
-    @GetMapping("/api/reservation/getFree")
-    public @ResponseBody String getFree(@RequestParam(required = true, name = "start_time") String start,
-                                        @RequestParam(required = true, name = "end_time") String end) {
-
-        return this.gson.toJson(this.reservationService.getFreeHallIdsByDayAndTimePeriod(start, end));
-    }
-
-
     //Currently not used
     @GetMapping("/api/reservations")
     public @ResponseBody String getAll(@RequestParam(required = true, name = "hall_id") String hallId) {

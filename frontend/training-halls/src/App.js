@@ -8,6 +8,7 @@ import HomePage from './components/HomePage/HomePage';
 import Header from './components/common/Header';
 import PrivateRoute from './components/common/PrivateRoute';
 import HallReservePage from './components/Hall/HallReservePage';
+import HallSearchPage from './components/Hall/HallSearchPage';
 
 class App extends Component {
     constructor(props) {
@@ -28,6 +29,7 @@ class App extends Component {
                 <Switch>
                     <Route exact path="/" component={HomePage} />
                     <PrivateRoute path="/halls/details/:id" component={HallReservePage} />
+                    <PrivateRoute path="/halls/search" component={HallSearchPage} />
                     <Route path="/login" component={LoginPage} />
                     <Route path="/register" component={RegisterPage} />
                 </Switch>

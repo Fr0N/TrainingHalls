@@ -2,12 +2,10 @@ package com.traininghalls.areas.halls.controllers;
 
 import com.google.gson.Gson;
 import com.traininghalls.areas.halls.entities.Hall;
+import com.traininghalls.areas.halls.models.SearchHallModel;
 import com.traininghalls.areas.halls.services.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -34,5 +32,19 @@ public class HallController {
     @GetMapping("/api/halls/{id}")
     public @ResponseBody String getHalls(@PathVariable(name = "id") String id) {
         return this.gson.toJson(this.hallService.findById(id));
+    }
+
+    //Gets all halls (only the ids) that aren't reserved on the given day, for the given time period
+    //TODO:Should return models of the halls and ids
+//    @GetMapping("/api/reservation/getFree")
+//    public @ResponseBody String getFreeHalls(@RequestParam(required = true, name = "start_time") String start,
+//                                             @RequestParam(required = true, name = "end_time") String end) {
+//
+//        return this.gson.toJson(this.hallService.getFreeHallsByDayAndTimePeriod(start, end));
+//    }
+
+    @PostMapping("/api/halls/search")
+    public @ResponseBody String searchHalls(@RequestBody SearchHallModel searchHallModel) {
+        return this.gson.toJson(this.hallService.getFreeHallsByDayAndTimePeriod(searchHallModel));
     }
 }

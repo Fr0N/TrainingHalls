@@ -84,6 +84,10 @@ export default class HallReservePage extends Component {
         // this.props.history.push('/');      
     }
 
+    // calculatePrice() {
+    //     if(this.state.startTime)
+    // }
+
     render() {
         let main = <p>Loading &hellip;</p>;
         if (this.state.hall) {
@@ -129,6 +133,7 @@ export default class HallReservePage extends Component {
                     onSelectSlot={slotInfo => {
                         this.setState({ startTime: slotInfo.start.toLocaleString() }),
                         this.setState({ endTime: slotInfo.end.toLocaleString() })
+                        console.log(slotInfo.end - slotInfo.start)
                     }}
                     step={10}
                     style={{ height: "100vh" }}
