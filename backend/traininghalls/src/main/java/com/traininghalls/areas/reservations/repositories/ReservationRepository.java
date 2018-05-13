@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -33,7 +34,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, String
             "r.start_hour < :reservationEndHour AND :reservationEndHour <= r.end_hour))", nativeQuery = true)
     Reservation checkIfHallIsFreeByDayAndTimePeriod(
             @Param("hallId") String hallId,
-            @Param("reservationDay") String reservationDay,
-            @Param("reservationStartHour") String reservationStartHour,
-            @Param("reservationEndHour") String reservationEndHour);
+            @Param("reservationStart") Date reservationStart,
+            @Param("reservationEndH") Date reservationEnd);
 }

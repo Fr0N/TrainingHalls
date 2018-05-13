@@ -29,14 +29,11 @@ public class Reservation {
     @JoinColumn(name = "hall_id", referencedColumnName = "id")
     private Hall hall;
 
-    @Column(columnDefinition = "DATE")
-    private String day;
+    @Column(columnDefinition = "DATETIME")
+    private Date start;
 
-    @Column(columnDefinition = "TIME")
-    private String startHour;
-
-    @Column(columnDefinition = "TIME")
-    private String endHour;
+    @Column(columnDefinition = "DATETIME")
+    private Date end;
 
     public Reservation() {
     }
@@ -65,27 +62,19 @@ public class Reservation {
         this.hall = hall;
     }
 
-    public String getDay() {
-        return day;
+    public Date getStart() {
+        return start;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setStart(Date start) {
+        this.start = start;
     }
 
-    public String getStartHour() {
-        return startHour;
+    public Date getEnd() {
+        return end;
     }
 
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
-    }
-
-    public String getEndHour() {
-        return endHour;
-    }
-
-    public void setEndHour(String endHour) {
-        this.endHour = endHour;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 }

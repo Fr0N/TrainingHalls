@@ -6,6 +6,8 @@ import com.traininghalls.areas.halls.services.HallService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HallServiceImpl implements HallService {
 
@@ -19,5 +21,10 @@ public class HallServiceImpl implements HallService {
     @Override
     public Hall findById(String id) {
         return this.hallRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Hall> getHalls() {
+        return this.hallRepository.findAll();
     }
 }

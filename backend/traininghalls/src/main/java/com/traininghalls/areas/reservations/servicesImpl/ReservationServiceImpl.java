@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -38,8 +39,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public boolean checkIfHallIsFreeByDayAndTimePeriod(String hallId, String reservationDay, String reservationStartHour, String reservationEndHour) {
-        return this.reservationRepository.checkIfHallIsFreeByDayAndTimePeriod(hallId, reservationDay, reservationStartHour, reservationEndHour) == null;
+    public boolean checkIfHallIsFreeByDayAndTimePeriod(String hallId, Date reservationStart, Date reservationEnd) {
+        return this.reservationRepository.checkIfHallIsFreeByDayAndTimePeriod(hallId, reservationStart, reservationEnd) == null;
     }
 
     @Override
@@ -56,9 +57,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setUser(user);
         reservation.setHall(hallToBeReserved);
-        reservation.setDay(reservationBindingModel.getDay());
-        reservation.setStartHour(reservationBindingModel.getStartHour());
-        reservation.setEndHour(reservationBindingModel.getEndHour());
+        reservation.setStart(reservationBindingModel.getStart());
+        reservation.setEnd(reservationBindingModel.getEnd());
 
         System.out.println("Before transaction");
         this.executeTransactionApproval(reservation, user);
@@ -92,9 +92,8 @@ public class ReservationServiceImpl implements ReservationService {
     private boolean saveReservation(Reservation reservation, User user) {
         if (this.checkIfHallIsFreeByDayAndTimePeriod(
                 reservation.getHall().getId(),
-                reservation.getDay(),
-                reservation.getStartHour(),
-                reservation.getEndHour())) {
+                reservation.getStart(),
+                reservation.getEnd())) {
             Reservation result = this.reservationRepository.save(reservation);
             if (result == null) {
                 return false;

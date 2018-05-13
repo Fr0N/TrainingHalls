@@ -8,9 +8,9 @@ public class CreateReservationBindingModel {
 
     private String day;
 
-    private String startHour;
+    private Date start;
 
-    private String endHour;
+    private Date end;
 
     public CreateReservationBindingModel() {
     }
@@ -31,19 +31,19 @@ public class CreateReservationBindingModel {
         this.day = day;
     }
 
-    public String getStartHour() {
-        return startHour;
+    public Date getStart() {
+        return start;
     }
 
-    public void setStartHour(String startHour) {
-        this.startHour = startHour;
+    public void setStart(Date start) {
+        this.start = start;
     }
 
-    public String getEndHour() {
-        return endHour;
+    public Date getEnd() {
+        return end;
     }
 
-    public void setEndHour(String endHour) {
-        this.endHour = endHour;
+    public void setEnd(Date end) {
+        this.end = end;
     }
 }

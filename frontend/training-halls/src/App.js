@@ -6,6 +6,8 @@ import RegisterPage from './components/auth/RegisterPage';
 import LoginPage from './components/auth/LoginPage';
 import HomePage from './components/HomePage/HomePage';
 import Header from './components/common/Header';
+import PrivateRoute from './components/common/PrivateRoute';
+import HallReservePage from './components/Hall/HallReservePage';
 
 class App extends Component {
     constructor(props) {
@@ -25,6 +27,7 @@ render() {
           <Header loggedIn={localStorage.getItem('authToken') != null} onLogout={this.onLogout} />
           <Switch>
               <Route exact path="/" component={HomePage} />
+              <PrivateRoute path="/halls/details/:id" component={HallReservePage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/register" component={RegisterPage} />
           </Switch>

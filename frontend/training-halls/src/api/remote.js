@@ -43,4 +43,15 @@ async function getHalls() {
     return await res.json();
 }
 
-export { register, login, getHalls};
+async function getHallWithReservations(id) {
+    const res = await fetch(host + 'api/halls/' + id, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    
+    return await res.json();
+}
+
+export { register, login, getHalls, getHallWithReservations};
